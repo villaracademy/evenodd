@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Even/Odd R100 Deriv Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-effects">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+    </div>
+    
+    <div class="app-container">
+        <header>
+            <div class="brand">
+                <div class="logo">R100</div>
+                <h1>Even/Odd Analyzer</h1>
+            </div>
+            <div class="status-indicator">
+                <span class="dot live"></span>
+                <span>LIVE FEED</span>
+            </div>
+        </header>
+
+        <main class="dashboard">
+            <!-- Left Column: Stats & Ticks -->
+            <section class="panel stats-panel glass">
+                <h2>Market Statistics</h2>
+                
+                <div class="stat-group">
+                    <div class="stat-box">
+                        <span class="label">Last 20 Ticks</span>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar even-bar" id="bar-20-even" style="width: 50%;">E: 50%</div>
+                            <div class="progress-bar odd-bar" id="bar-20-odd" style="width: 50%;">O: 50%</div>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <span class="label">Last 100 Ticks</span>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar even-bar" id="bar-100-even" style="width: 50%;">E: 50%</div>
+                            <div class="progress-bar odd-bar" id="bar-100-odd" style="width: 50%;">O: 50%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-ticks" id="recent-ticks-container">
+                    <!-- Ticks will be injected here -->
+                </div>
+
+                <div class="digit-histogram">
+                    <h3>Digit Frequencies (Last 50)</h3>
+                    <div class="histogram-bars" id="histogram-container">
+                        <!-- Histogram bars 0-9 injected here -->
+                    </div>
+                </div>
+
+                <div class="performance-panel glass">
+                    <div class="perf-header">
+                        <h3>Desempenho</h3>
+                        <button id="reset-stats-btn" class="reset-btn">Zerar</button>
+                    </div>
+                    <div class="perf-stats">
+                        <div class="perf-box win-box">
+                            <span class="perf-label">WIN</span>
+                            <span class="perf-value" id="stat-win">0</span>
+                        </div>
+                        <div class="perf-box win-g1-box">
+                            <span class="perf-label">WIN G1</span>
+                            <span class="perf-value" id="stat-g1">0</span>
+                        </div>
+                        <div class="perf-box win-g2-box">
+                            <span class="perf-label">WIN G2</span>
+                            <span class="perf-value" id="stat-g2">0</span>
+                        </div>
+                        <div class="perf-box loss-box">
+                            <span class="perf-label">LOSS</span>
+                            <span class="perf-value" id="stat-loss">0</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column: Signal & Countdown -->
+            <section class="panel signal-panel">
+                <div class="countdown-container glass">
+                    <svg class="circular-chart" viewBox="0 0 36 36">
+                        <path class="circle-bg"
+                          d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                        <path class="circle" id="countdown-circle"
+                          stroke-dasharray="100, 100"
+                          d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                    </svg>
+                    <div class="countdown-text">
+                        <span id="countdown-seconds">20</span>
+                        <span class="countdown-label">secs to next</span>
+                    </div>
+                </div>
+
+                <div class="signal-card glass hidden" id="signal-card">
+                    <div class="signal-header">
+                        <h2>SIGNAL DETECTED</h2>
+                    </div>
+                    <div class="signal-direction" id="signal-direction">ODD</div>
+                    <div class="signal-confidence">
+                        <span class="conf-label">CONFIDENCE:</span>
+                        <span class="conf-value" id="signal-confidence">85%</span>
+                    </div>
+                    <div class="signal-factors">
+                        <h3>Analysis Factors:</h3>
+                        <ul id="signal-factors-list">
+                            <!-- Factors injected here -->
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="price-monitor glass">
+                    <span class="price-label">Current Price</span>
+                    <span class="current-price" id="current-price">0.00</span>
+                    <span class="price-momentum" id="price-momentum">Neutral</span>
+                </div>
+            </section>
+        </main>
+
+        <!-- Trade History Section -->
+        <section class="history-panel glass">
+            <h2>Histórico de Sinais</h2>
+            <div class="history-table-container">
+                <table id="history-table">
+                    <thead>
+                        <tr>
+                            <th>Horário</th>
+                            <th>Sinal Inicial</th>
+                            <th>Fase da Vitória (ou Loss)</th>
+                            <th>Resultado Final</th>
+                            <th>Confiança</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-tbody">
+                        <!-- History rows injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script src="deriv_api.js?v=3"></script>
+    <script src="app.js?v=3"></script>
+</body>
+</html>
